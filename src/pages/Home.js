@@ -1,19 +1,28 @@
 import supabase from "../config/supabase-client";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 import SmoothieCard from "../components/SmoothieCard";
 
 const Home = () => {
     const [fetchError, setFetchError] = useState(null);
     const [smoothies, setSmoothies] = useState(null);
+    const [orderBy, setOrderBy] = useState('created_at')
 
-    const fetchSmooties = async () => {
+    const handleDelete = async(id) => {
+        setSmoothies(smoothies => smoothies
+            .filter(smoothie => smoothie.id !== id)
+        );
+    }
+    const fetchSmooties = useCallback(async () => {
         const {
             data,
             error
         } = await supabase
             .from('smoothies')
-            .select();
+            .select()
+            .order(orderBy, {
+                ascending: false
+            });
 
         if (error) {
             setFetchError('Could not fetch the smoothies');
@@ -25,11 +34,11 @@ const Home = () => {
             setSmoothies(data);
             setFetchError(null);
         }
-    }
+    }, [orderBy])
 
     useEffect(() => {
         void fetchSmooties();
-    }, []);
+    }, [fetchSmooties]);
 
     return (
         <div className="page home">
@@ -39,11 +48,17 @@ const Home = () => {
 
             {smoothies && (
                 <div className="smoothies">
-                    {/* order-by buttons */}
+                    <div className="order-by">
+                        <p>Order by:</p>
+                        <button onClick={() => setOrderBy('created_at')}>Time Created</button>
+                        <button onClick={() => setOrderBy('title')}>Title</button>
+                        <button onClick={() => setOrderBy('rating')}>Rating</button>
+                    </div>
                     <div className="smoothie-grid">
                         {smoothies.map(smoothie => (
                             <SmoothieCard
                                 key={smoothie.id}
+                                onDelete={handleDelete}
                                 smoothie={smoothie}
                             />
                         ))}

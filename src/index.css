@@ -64,10 +64,25 @@ nav h1 {
 .smoothie-card .buttons {
   text-align: right;
 }
+
+.smoothie-card button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .smoothie-card i {
   color: #bbb;
   margin-left: 10px;
-  font-size: 1.2em;
+  width: 20px;
+  height: 20px;
+  font-size: 18px;
   padding: 6px;
   background: #eee;
   border-radius: 50%;
@@ -95,6 +110,17 @@ form button {
   border: 0;
   border-radius: 6px;
   padding: 6px 8px;
+  font-family: "Poppins";
+  cursor: pointer;
+}
+
+.order-by button {
+  margin-right: 10px;
+  background: var(--primary);
+  color: #fff;
+  border: 0;
+  padding: 4px 8px;
+  border-radius: 6px;
   font-family: "Poppins";
   cursor: pointer;
 }
